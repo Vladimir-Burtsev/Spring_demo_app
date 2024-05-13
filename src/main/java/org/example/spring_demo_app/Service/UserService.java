@@ -25,7 +25,7 @@ public class UserService {
     public void deleteUserById(long id) {
         userRepository.deleteById(id);
     }
-    public User updateUser(User user, long id) {
+    public User updateUser(User user) {
         return userRepository.save(user);
     }
 }
