@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование пользователя</title>
+    <!-- Подключаем внешний файл стилей -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<h1>Редактирование пользователя</h1>
+<!-- Форма для редактирования пользователя -->
+<form action="/users" th:action="@{/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <label for="firstName">Имя:</label>
+    <input type="text" id="firstName" th:field="*{firstName}" required>
+    <br><br>
+    <label for="lastName">Фамилия:</label>
+    <input type="text" id="lastName" th:field="*{lastName}" required>
+    <br><br>
+    <label for="age">Возраст:</label>
+    <input type="number" id="age" th:field="*{age}" required>
+    <br><br>
+    <label for="country">Страна:</label>
+    <input type="text" id="country" th:field="*{country}" required>
+    <br><br>
+    <button type="submit" class="btn">Сохранить</button>
+    <br><br>
+</form>
+<!-- Ссылка для возврата к списку пользователей -->
+<a th:href="@{/users}" class="btn">Вернуться к списку пользователей</a>
+</body>
+</html>
