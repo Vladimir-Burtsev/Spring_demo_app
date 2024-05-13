@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -43,18 +43,23 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/users";
     }
-    @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable("id") int id){
+    @GetMapping("/edit")
+    public String edit(Model model, @RequestParam(value = "id") long id){
         model.addAttribute("user", userService.findUserById(id));
         return "Edit";
     }
-    @PatchMapping("/{id}")
+    @PostMapping("/edit/{id}")
     public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult, @PathVariable("id") long id){
+                         BindingResult bindingResult, @RequestParam("id") long id){
         if (bindingResult.hasErrors())
             return "Edit";
 
-        userService.updateUser(user, id);
+        userService.updateUser(user);
+        return "redirect:/users";
+    }
+    @PostMapping("/delete")
+    public String deleteUser(@RequestParam("id") long id) {
+        userService.deleteUserById(id);
         return "redirect:/users";
     }
 }
