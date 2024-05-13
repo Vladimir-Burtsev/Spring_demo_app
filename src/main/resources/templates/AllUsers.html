@@ -35,12 +35,7 @@
         <td>
             <!-- Кнопка для просмотра деталей пользователя -->
             <a th:href="@{'/users/' + ${user.id}}" class="btn">Подробнее</a>
-            <!-- Кнопка для редактирования пользователя -->
-            <a th:href="@{'/users/edit/' + ${user.id}}" class="btn">Редактировать</a>
-            <!-- Кнопка для удаления пользователя -->
-            <form th:action="@{'/users/delete/' + ${user.id}}" method="post" style="display: inline;">
-                <button type="submit" class="btn">Удалить</button>
-            </form>
+
         </td>
     </tr>
     </tbody>
