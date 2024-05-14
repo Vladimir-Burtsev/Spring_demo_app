@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -27,8 +29,13 @@ public class UserController {
 
     @GetMapping("{id}")
     public String findById(@PathVariable int id, Model model) {
-        model.addAttribute("user", userService.findUserById(id));
-        return "UserDetails";
+        try {
+            User user = userService.findUserById(id);
+            model.addAttribute("user", user);
+            return "UserDetails";
+        }catch (NoSuchElementException e) {
+            return "NotFound";
+        }
     }
 
     @GetMapping("/new")
@@ -53,7 +60,7 @@ public class UserController {
         return "Edit";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     public String update(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult, @RequestParam("id") long id) {
         if (bindingResult.hasErrors()) {
