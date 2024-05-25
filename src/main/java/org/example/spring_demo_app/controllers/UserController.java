@@ -1,8 +1,9 @@
-package org.example.spring_demo_app.controller;
+package org.example.spring_demo_app.controllers;
 
 import jakarta.validation.Valid;
-import org.example.spring_demo_app.model.User;
-import org.example.spring_demo_app.service.UserService;
+import org.example.spring_demo_app.models.User;
+import org.example.spring_demo_app.services.RoleService;
+import org.example.spring_demo_app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,50 +13,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping()
-    public String findAll(Model model) {
-        model.addAttribute("users", userService.findAllUsers());
-        return "AllUsers";
-    }
-
-    @GetMapping("{id}")
-    public String findById(@PathVariable int id, Model model) {
+    public String findById(@RequestParam("id") int id, Model model) {
         try {
             User user = userService.findUserById(id);
             model.addAttribute("user", user);
             return "UserDetails";
-        }catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return "NotFound";
         }
     }
 
-    @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("user", new User());
-        return "NewUser";
-    }
-
-    @PostMapping()
-    public String createUser(@ModelAttribute("user") @Valid User user,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "NewUser";
-        }
-        userService.saveUser(user);
-        return "redirect:/users";
-    }
-
     @GetMapping("/edit")
-    public String edit(Model model, @RequestParam(value = "id") long id) {
+    public String editForm(Model model, @RequestParam(value = "id") long id) {
+        model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("user", userService.findUserById(id));
         return "Edit";
     }
@@ -67,12 +49,12 @@ public class UserController {
             return "Edit";
         }
         userService.updateUser(user);
-        return "redirect:/users";
+        return "redirect:/user";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") long id) {
         userService.deleteUserById(id);
-        return "redirect:/users";
+        return "redirect:/user";
     }
 }
