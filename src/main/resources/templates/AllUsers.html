@@ -10,12 +10,15 @@
 <body>
 <h1>Список пользователей</h1>
 <!-- Кнопка для добавления нового пользователя -->
-<a th:href="@{/users/new}" class="btn">Добавить нового пользователя</a>
+<a th:href="@{/admin/new}" class="btn">Добавить нового пользователя</a>
+<!-- Кнопка для выхода из системы -->
+<a th:href="@{/logout}" class="btn">Выйти</a>
 <br><br>
 <table>
     <thead>
     <tr>
         <th>ID</th>
+        <th>Login</th>
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Возраст</th>
@@ -28,14 +31,21 @@
     <tr th:each="user : ${users}">
         <!-- Переменная user содержит информацию о каждом пользователе -->
         <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
         <td th:text="${user.firstName}"></td>
         <td th:text="${user.lastName}"></td>
         <td th:text="${user.age}"></td>
         <td th:text="${user.country}"></td>
         <td>
             <!-- Кнопка для просмотра деталей пользователя -->
-            <a th:href="@{'/users/' + ${user.id}}" class="btn">Подробнее</a>
-
+            <a th:href="@{/user(id=${user.id})}" class="btn">Подробнее</a>
+            <!-- Кнопка для редактирования пользователя -->
+            <a th:href="@{/user/edit(id=${user.id})}" class="btn">Редактировать</a>
+            <!-- Кнопка для удаления пользователя -->
+            <form th:action="@{/user/delete}" method="post" style="display: inline;">
+                <input type="hidden" name="id" th:value="${user.id}" />
+                <button type="submit" class="btn">Удалить</button>
+            </form>
         </td>
     </tr>
     </tbody>
