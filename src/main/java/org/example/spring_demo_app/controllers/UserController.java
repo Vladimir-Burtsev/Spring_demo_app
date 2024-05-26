@@ -35,26 +35,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/edit")
-    public String editForm(Model model, @RequestParam(value = "id") long id) {
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("user", userService.findUserById(id));
-        return "Edit";
-    }
-
-    @PostMapping("/edit")
-    public String update(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult, @RequestParam("id") long id) {
-        if (bindingResult.hasErrors()) {
-            return "Edit";
-        }
-        userService.updateUser(user);
-        return "redirect:/user";
-    }
-
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") long id) {
         userService.deleteUserById(id);
-        return "redirect:/user";
+        return "redirect:/admin";
     }
 }

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -44,6 +41,22 @@ public class AdminController {
         }
 
         userService.saveUser(user);
+        return "redirect:/admin";
+    }
+    @GetMapping("/edit")
+    public String editForm(Model model, @RequestParam(value = "id") long id) {
+        model.addAttribute("roles", roleService.findAllRoles());
+        model.addAttribute("user", userService.findUserById(id));
+        return "Edit";
+    }
+
+    @PostMapping("/edit")
+    public String updateUser(@ModelAttribute("user") @Valid User user,
+                             BindingResult bindingResult, @RequestParam("id") long id) {
+        if (bindingResult.hasErrors()) {
+            return "Edit";
+        }
+        userService.updateUser(user);
         return "redirect:/admin";
     }
 }
