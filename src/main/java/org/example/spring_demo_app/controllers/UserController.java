@@ -34,10 +34,4 @@ public class UserController {
             return "NotFound";
         }
     }
-
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") long id) {
-        userService.deleteUserById(id);
-        return "redirect:/admin";
-    }
 }
