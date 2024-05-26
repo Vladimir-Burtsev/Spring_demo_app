@@ -14,9 +14,20 @@
     <label for="username">Логин:</label>
     <input type="text" id="username" th:field="*{username}">
     <br><br>
-    <label for="password">Пароль:</label>
-    <input type="text" id="password" th:field="*{password}">
-    <br><br>
+    <label>Пароль:</label>
+    <input type="password" th:field="*{password}" placeholder="Enter new password" id="passwordInput">
+    <input type="checkbox" onclick="showPassword()"> Show Password<br><br>
+
+    <script>
+        function showPassword() {
+            var passwordInput = document.getElementById("passwordInput");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
     <label for="firstName">Имя:</label>
     <input type="text" id="firstName" th:field="*{firstName}">
     <br><br>
