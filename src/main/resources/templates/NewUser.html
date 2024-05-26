@@ -29,12 +29,13 @@
     <label for="country">Страна:</label>
     <input type="text" id="country" th:field="*{country}">
     <br><br>
-    <label for="role"> Select role</label>
-    <select id="role" th:field="*{roles}" multiple>
-        <option th:each="role:${roles}" th:value="${role.id}" th:text="${role.role}"/>
-    </select>
-    <br/>
-    <button type="submit" class="btn">Сохранить</button>
+    <label>Выберите роль:</label>
+    <div th:each="role : ${roles}">
+        <label>
+            <input type="checkbox" th:value="${role.id}" th:field="*{roles}"/>
+            <span th:text="${role.role}"></span>
+        </label>
+    </div>
     <br><br>
 </form>
 <!-- Ссылка для возврата к списку пользователей -->
