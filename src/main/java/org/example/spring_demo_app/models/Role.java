@@ -12,6 +12,7 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(unique = true)
     private String role;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
@@ -58,20 +59,16 @@ public class Role implements GrantedAuthority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role1 = (Role) o;
-        return id == role1.id && Objects.equals(role, role1.role) && Objects.equals(users, role1.users);
+        return Objects.equals(getAuthority(), role1.getAuthority());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role, users);
+        return Objects.hash(getAuthority());
     }
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", role='" + role + '\'' +
-                ", users=" + users +
-                '}';
+        return role;
     }
 }
