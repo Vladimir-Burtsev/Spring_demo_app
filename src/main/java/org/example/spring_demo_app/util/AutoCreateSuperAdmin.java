@@ -26,7 +26,7 @@ public class AutoCreateSuperAdmin implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        if (!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername("admin@mail.ru")) {
             Role adminRole = roleRepository.findByRole("ADMIN");
             if (adminRole == null) {
                 adminRole = new Role();
@@ -41,7 +41,7 @@ public class AutoCreateSuperAdmin implements CommandLineRunner {
             }
 
             User adminUser = new User();
-            adminUser.setUsername("admin");
+            adminUser.setUsername("admin@mail.ru");
             adminUser.setPassword(encoder.encode("admin"));
             adminUser.setRoles(Set.of(adminRole, userRole));
             userRepository.save(adminUser);
