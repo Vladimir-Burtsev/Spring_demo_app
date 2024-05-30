@@ -1,6 +1,7 @@
 package org.example.spring_demo_app.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true, nullable = false)
+    @Email
     private String username;
     @Column(nullable = false)
     private String password;
@@ -102,6 +104,11 @@ public class User implements UserDetails {
 
     public void setRoles(@NotNull Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getRolesAsString() {
+        String s = getRoles().toString().replace("[", "").replace("]", "");
+        return s;
     }
 
     @Override
