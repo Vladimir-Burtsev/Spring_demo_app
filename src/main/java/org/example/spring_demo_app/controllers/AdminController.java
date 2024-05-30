@@ -5,10 +5,17 @@ import org.example.spring_demo_app.models.User;
 import org.example.spring_demo_app.services.RoleService;
 import org.example.spring_demo_app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -22,9 +29,13 @@ public class AdminController {
         this.roleService = roleService;
     }
     @GetMapping()
-    public String findAll(Model model) {
+    public String findAll(Model model, Principal principal) {
+        User currentUser = userService.findByUsername(principal.getName()).get();
         model.addAttribute("users", userService.findAllUsers());
-        return "AllUsers";
+        model.addAttribute("user", new User());
+        model.addAttribute("roles", roleService.findAllRoles());
+        model.addAttribute("userCurrent", currentUser);
+        return "admin/show-all-users";
     }
     @GetMapping("/new")
     public String newUserForm(Model model) {
@@ -59,8 +70,8 @@ public class AdminController {
         userService.updateUser(user);
         return "redirect:/admin";
     }
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") long id) {
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable long id) {
         userService.deleteUserById(id);
         return "redirect:/admin";
     }
